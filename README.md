@@ -10,7 +10,7 @@ The outputs csv files are added under Output Rusults Folder for both APARF and P
 
 ## Installation
 
-Follow this [installation](https://github.com/Niwedita17/Sumo_with_ns3/wiki#installation) guide from the Wiki section.
+Follow this [installation](https://github.com/Niwedita17/PARF-APARF-in-ns3/wiki/Installation) guide from the Wiki section.
 
 ## System specification
 
