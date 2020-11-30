@@ -6,7 +6,7 @@ Using NS-3 , we compared the two rate adaptation algorithms : Parf and Aparf in 
 - We simulate vehicle mobility using SUMO tool
 - Different csv files are generated due to change of rate adaptation algorithm. 
 
-The outputs csv files are added under Output Rusults Folder for both APARF and PARF. A link to our paper : [Performance Evaluation of PARF and APARF in Vehicular Ad-hoc Networks using NS-3](https://www.overleaf.com/read/qsrbpgrjqyqh) 
+The outputs csv files are added under Output Rusults Folder for both APARF and PARF. A link to our paper : [Performance Evaluation of PARF and APARF in Vehicular Ad-hoc Networks using NS-3]
 
 ## Installation
 
