@@ -120,6 +120,7 @@
 #include "ns3/integer.h"
 #include "ns3/wave-bsm-helper.h"
 #include "ns3/wave-helper.h"
+#include "ns3/netanim-module.h"
 // future #include "ns3/topology.h"
 
 using namespace ns3;
@@ -1333,7 +1334,7 @@ VanetRoutingExperiment::VanetRoutingExperiment ()
     m_traceFile (""),
     m_logFile ("low99-ct-unterstrass-1day.filt.7.adj.log"),
     m_mobility (1),
-    m_nNodes (156),
+    m_nNodes (20),
     m_TotalSimTime (300.01),
     m_rate ("2048bps"),
     m_phyModeB ("DsssRate11Mbps"),
@@ -1417,7 +1418,7 @@ static ns3::GlobalValue g_mobility ("VRCmobility",
                                     ns3::MakeUintegerChecker<uint32_t> ());
 static ns3::GlobalValue g_nNodes ("VRCnNodes",
                                   "Number of nodes (vehicles)",
-                                  ns3::UintegerValue (156),
+                                  ns3::UintegerValue (20),
                                   ns3::MakeUintegerChecker<uint32_t> ());
 static ns3::GlobalValue g_nodeSpeed ("VRCnodeSpeed",
                                      "Node speed (m/s) for RWP model",
@@ -1437,7 +1438,7 @@ static ns3::GlobalValue g_verbose ("VRCverbose",
                                    ns3::MakeUintegerChecker<uint32_t> ());
 static ns3::GlobalValue g_scenario ("VRCscenario",
                                     "Scenario",
-                                    ns3::UintegerValue (1),
+                                    ns3::UintegerValue (2),
                                     ns3::MakeUintegerChecker<uint32_t> ());
 static ns3::GlobalValue g_routingTables ("VRCroutingTables",
                                          "Dump routing tables at t=5 seconds 0=no;1=yes",
@@ -1445,11 +1446,11 @@ static ns3::GlobalValue g_routingTables ("VRCroutingTables",
                                          ns3::MakeUintegerChecker<uint32_t> ());
 static ns3::GlobalValue g_asciiTrace ("VRCasciiTrace",
                                       "Dump ASCII trace 0=no;1=yes",
-                                      ns3::UintegerValue (0),
+                                      ns3::UintegerValue (1),
                                       ns3::MakeUintegerChecker<uint32_t> ());
 static ns3::GlobalValue g_pcap ("VRCpcap",
                                 "Generate PCAP files 0=no;1=yes",
-                                ns3::UintegerValue (0),
+                                ns3::UintegerValue (1),
                                 ns3::MakeUintegerChecker<uint32_t> ());
 static ns3::GlobalValue g_cumulativeBsmCaptureStart ("VRCcumulativeBsmCaptureStart",
                                                      "Simulation starte time for capturing cumulative BSM",
@@ -1724,6 +1725,7 @@ VanetRoutingExperiment::Run ()
   CheckThroughput ();
 
   Simulator::Stop (Seconds (m_TotalSimTime));
+  AnimationInterface anim ("vanet-parf.xml");
   Simulator::Run ();
   Simulator::Destroy ();
 }
@@ -2265,19 +2267,13 @@ VanetRoutingExperiment::SetupAdhocDevices ()
   // Setup 802.11b stuff
   wifi.SetStandard (WIFI_PHY_STANDARD_80211b);
 
-  wifi.SetRemoteStationManager ("ns3::ConstantRateWifiManager",
-                                "DataMode",StringValue (m_phyModeB),
-                                "ControlMode",StringValue (m_phyModeB));
+  wifi.SetRemoteStationManager ("ns3::ParfWifiManager");
 
   // Setup 802.11p stuff
-  wifi80211p.SetRemoteStationManager ("ns3::ConstantRateWifiManager",
-                                      "DataMode",StringValue (m_phyMode),
-                                      "ControlMode",StringValue (m_phyMode));
+  wifi80211p.SetRemoteStationManager ("ns3::ParfWifiManager");
 
   // Setup WAVE-PHY stuff
-  waveHelper.SetRemoteStationManager ("ns3::ConstantRateWifiManager",
-                                      "DataMode",StringValue (m_phyMode),
-                                      "ControlMode",StringValue (m_phyMode));
+  waveHelper.SetRemoteStationManager ("ns3::ParfWifiManager");
 
   // Set Tx Power
   wifiPhy.Set ("TxPowerStart",DoubleValue (m_txp));
@@ -2389,11 +2385,11 @@ VanetRoutingExperiment::SetupScenario ()
     {
       // Realistic vehicular trace in 4.6 km x 3.0 km suburban Zurich
       // "low density, 99 total vehicles"
-      m_traceFile = "src/wave/examples/low99-ct-unterstrass-1day.filt.7.adj.mob";
+      m_traceFile = "src/wave/examples/mobility-nitk.tcl";
       m_logFile = "low99-ct-unterstrass-1day.filt.7.adj.log";
       m_mobility = 1;
-      m_nNodes = 99;
-      m_TotalSimTime = 300.01;
+      m_nNodes = 100;
+      m_TotalSimTime = 50.01;
       m_nodeSpeed = 0;
       m_nodePause = 0;
       m_CSVfileName = "low_vanet-routing-compare.csv";
